@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+#PBS -P Training
+#PBS -N test_bagdask
+#PBS -l select=1:ncpus=12:mem=4GB
+#PBS -l walltime=00:10:00
+#PBS -q defaultQ
+
+cd $PBS_O_WORKDIR
+
+source /project/Training/kmarTrain/miniconda3/bin/activate
+conda info
+conda activate dask
+
+python bag.py
+
+

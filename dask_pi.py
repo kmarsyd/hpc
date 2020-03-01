@@ -1,13 +1,12 @@
+'''
+Estimation of pi using dask library 
 
 '''
-Estimation of pi using python multiprocessing library
 
-
-'''
 
 import numpy.random as rng
 import time
-import multiprocessing
+import dask
 
 def pi_run(num_trials):
     """Calculate pi based on points with a box and circle of radius 1
@@ -25,15 +24,27 @@ def pi_run(num_trials):
 
 def cycle_pi():
     """Cycle through a list of trials of increasing magnitude
+    using dask delayed to create lazy set of functions
     """
     num_trials = [10**1,10**2,10**3,10**4,10**5,10**6,10**7]
-    pi_estimates = []
-    with multiprocessing.Pool() as pool:
-        result = pool.map(pi_run,num_trials)
-    return result
+    lazy_pi_estimates = []
+    
+    for trial in num_trials:
+        lazy_result = dask.delayed(pi_run)(trial)
+        lazy_pi_estimates.append(lazy_result)
+
+    return lazy_pi_estimates
 
 if __name__ == "__main__":
+    from dask.distributed import Client
+    client = Client()
+    print(client)
     start_time = time.time()
     pi = cycle_pi()
+
+    #trigger the computation
+    result = dask.compute(*pi)
     duration = time.time() - start_time
-    print(f"Pi convergence : {pi} calculated in {duration} seconds")
+    #notice pi is now a set of lazy results
+    pi[0]
+    print(f"Pi convergence with dask : {result} calculated in {duration} seconds")
