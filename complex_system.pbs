@@ -1,0 +1,12 @@
+#!/bin/bash
+#PBS -P Training
+#PBS -N testcomplex
+#PBS -l select=1:ncpus=10:mem=12GB
+#PBS -l walltime=00:20:00
+
+cd $PBS_O_WORKDIR
+
+source /project/Training/kmarTrain/miniconda3/bin/activate
+conda info
+conda activate dask
+python complex_system.py
