@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #PBS -P Training
-#PBS -N train_pi
+#PBS -N out_pi
 #PBS -l select=1:ncpus=20
 #PBS -l walltime=00:05:00
 #PBS -q defaultQ
